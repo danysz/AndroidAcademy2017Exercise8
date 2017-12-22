@@ -1,6 +1,12 @@
 package tlv.academy.android.fundamentals_exercise_8;
 
 
+import android.widget.Toast;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.Retrofit;
 
 /**
@@ -27,7 +33,15 @@ public class NetworkImpl {
         mNetworkService = retrofit.create(INetwork.class);
     }
 
-    public void doDownloadFile(String aFileName){
-        mNetworkService.doDownloadFile( aFileName);
+    public ResponseBody doDownloadFile(String aFileName) {
+        Call<ResponseBody> responseDownload = mNetworkService.doDownloadFile(aFileName);
+
+        try {
+            return responseDownload.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
