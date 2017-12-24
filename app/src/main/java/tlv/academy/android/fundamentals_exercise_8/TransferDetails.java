@@ -11,14 +11,14 @@ public class TransferDetails implements Serializable {
 
     private String mFileName;
     private int mProgress;
-    private int mCurrentFileSize;
-    private int mTotalFileSize;
+    private long mCurrentFileSize;
+    private long mTotalFileSize;
 
     public TransferDetails() {
     }
 
 
-    public TransferDetails(String aFileName, int aProgress, int aCurrentFileSize, int aTotalFileSize) {
+    public TransferDetails(String aFileName, int aProgress, long aCurrentFileSize, long aTotalFileSize) {
         mFileName = aFileName;
         mProgress = aProgress;
         mCurrentFileSize = aCurrentFileSize;
@@ -41,19 +41,19 @@ public class TransferDetails implements Serializable {
         mProgress = aProgress;
     }
 
-    public int getCurrentFileSize() {
+    public long getCurrentFileSize() {
         return mCurrentFileSize;
     }
 
-    public void setCurrentFileSize(int aCurrentFileSize) {
+    public void setCurrentFileSize(long aCurrentFileSize) {
         mCurrentFileSize = aCurrentFileSize;
     }
 
-    public int getTotalFileSize() {
+    public long getTotalFileSize() {
         return mTotalFileSize;
     }
 
-    public void setTotalFileSize(int aTotalFileSize) {
+    public void setTotalFileSize(long aTotalFileSize) {
         mTotalFileSize = aTotalFileSize;
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -15,6 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import okhttp3.ResponseBody;
+import retrofit2.http.Streaming;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -22,6 +24,8 @@ import okhttp3.ResponseBody;
  * <p>
  */
 public class IntentServiceDownload extends IntentService {
+    private static final String TAG = "IntentServiceDownload";
+
     private static final String ACTION_DOWNLOAD = "tlv.academy.android.fundamentals_exercise_8.action.DOWNLOAD";
     private static final String ACTION_UPLOAD = "tlv.academy.android.fundamentals_exercise_8.action.UPLOAD";
 
@@ -76,78 +80,12 @@ public class IntentServiceDownload extends IntentService {
     }
 
     private void handleActionDownload(String param1) {
-        saveFile(NetworkImpl.getInstance().doDownloadFile( param1));
+//        saveFile(NetworkImpl.getInstance().doDownloadFile( param1));
+        NetworkImpl.getInstance().doDownloadFile( param1);
     }
 
     private void handleActionUpload(String param1) {
         throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-
-    private void saveFile(ResponseBody body){
-
-        int totalFileSize;
-        int count;
-        byte data[] = new byte[1024 * 4];
-        long fileSize = body.contentLength();
-        InputStream bis = new BufferedInputStream(body.byteStream(), 1024 * 8);
-        File outputFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "file.zip");
-        OutputStream output;
-        try {
-            output = new FileOutputStream(outputFile);
-            long total = 0;
-            long startTime = System.currentTimeMillis();
-            int timeCount = 1;
-            while ((count = bis.read(data)) != -1) {
-
-                total += count;
-                totalFileSize = (int) (fileSize / (Math.pow(1024, 2)));
-                double current = Math.round(total / (Math.pow(1024, 2)));
-
-                int progress = (int) ((total * 100) / fileSize);
-
-                long currentTime = System.currentTimeMillis() - startTime;
-
-                TransferDetails transferDetails = new TransferDetails();
-                transferDetails.setTotalFileSize(totalFileSize);
-
-                if (currentTime > 1000 * timeCount) {
-
-                    transferDetails.setCurrentFileSize((int) current);
-                    transferDetails.setProgress(progress);
-                    sendIntent(transferDetails);
-                    timeCount++;
-                }
-
-                output.write(data, 0, count);
-            }
-            onDownloadComplete();
-            output.flush();
-            output.close();
-            bis.close();
-
-        } catch (FileNotFoundException aE) {
-            aE.printStackTrace();
-        } catch (IOException aE) {
-            aE.printStackTrace();
-        }
-
-    }
-
-
-    private void sendIntent(TransferDetails aTransferDetails){
-
-        Intent intent = new Intent(MainActivity.MESSAGE_PROGRESS);
-        intent.putExtra("transfer_details",aTransferDetails);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }
-
-    private void onDownloadComplete(){
-
-        TransferDetails transferDetails = new TransferDetails();
-        transferDetails.setProgress(100);
-        sendIntent(transferDetails);
-
     }
 
 }
