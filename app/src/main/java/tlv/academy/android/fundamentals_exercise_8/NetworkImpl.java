@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,11 +51,7 @@ public class NetworkImpl {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "server contacted and has file");
-
-                    boolean writtenToDisk = writeResponseBodyToDisk(response.body());
-
-                    Log.d(TAG, "file download was a success? " + writtenToDisk);
+                    writeResponseBodyToDisk(response.body());
                 } else {
                     Log.d(TAG, "server contact failed");
                 }
@@ -68,8 +62,6 @@ public class NetworkImpl {
                 Log.e(TAG, "error : " + t.getMessage());
             }
         });
-
-
     }
 
     private boolean writeResponseBodyToDisk(ResponseBody body) {

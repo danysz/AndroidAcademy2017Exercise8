@@ -11,10 +11,6 @@ public class ReceiverProgress extends BroadcastReceiver {
 
     private TextView mTextViewProgress;
 
-    public TextView getTextViewProgress() {
-        return mTextViewProgress;
-    }
-
     public void setTextViewProgress(TextView aTextViewProgress) {
         mTextViewProgress = aTextViewProgress;
     }
@@ -29,17 +25,6 @@ public class ReceiverProgress extends BroadcastReceiver {
                 mTextViewProgress.setText( "progress : " + String.valueOf( transferDetails.getProgress()));
             }
 
-
-//            mProgressBar.setProgress(download.getProgress());
-//            if(download.getProgress() == 100){
-//
-//                mProgressText.setText("File Download Complete");
-//
-//            } else {
-//
-//                mProgressText.setText(String.format("Downloaded (%d/%d) MB",download.getCurrentFileSize(),download.getTotalFileSize()));
-//
-//            }
         }
     }
 }
